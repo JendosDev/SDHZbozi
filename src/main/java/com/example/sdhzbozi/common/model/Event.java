@@ -21,8 +21,9 @@ public class Event {
     @Column(name = "event_date")
     private LocalDateTime date;
 
-    @Column(name = "department_id")
-    private Long departmentId;
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department departmentId;
 
     @Column(name = "created_by")
     private Long createdById;
@@ -30,7 +31,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(String title, String description, LocalDateTime date, Long departmentId, Long createdById) {
+    public Event(String title, String description, LocalDateTime date, Department departmentId, Long createdById) {
         this.title = title;
         this.description = description;
         this.date = date;
@@ -70,11 +71,11 @@ public class Event {
         this.date = date;
     }
 
-    public Long getDepartmentId() {
+    public Department getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(Long departmentId) {
+    public void setDepartmentId(Department departmentId) {
         this.departmentId = departmentId;
     }
 

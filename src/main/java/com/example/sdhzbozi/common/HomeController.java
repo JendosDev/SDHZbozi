@@ -14,13 +14,8 @@ public class HomeController {
         return Map.of(
                 "title", "SDH Úbislavice",
                 "subtitle", "Spolek hasičů a dětský kroužek",
-                "sections", List.of(
-                        "Domácí stránka", "Akce",
-                        "Dětský kroužek",
-                        "Historie spolku",
-                        "Kontakt"
-                )
-        );
+                    "news", "news"
+                );
     }
 
 }
