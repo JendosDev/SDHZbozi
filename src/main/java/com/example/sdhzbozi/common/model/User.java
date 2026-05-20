@@ -17,7 +17,7 @@ public class User {
     private String email;
 
     @Column(name = "password")
-    private String passwordHash;
+    private String password;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
@@ -26,10 +26,9 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String passwordHash, Role roleId) {
+    public User(String name, String email, Role roleId) {
         this.name = name;
         this.email = email;
-        this.passwordHash = passwordHash;
         this.roleId = roleId;
     }
 
@@ -63,13 +62,5 @@ public class User {
 
     public void setRoleId(Role roleId) {
         this.roleId = roleId;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 }
