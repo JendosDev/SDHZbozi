@@ -1,11 +1,13 @@
 package com.example.sdhzbozi.common.service;
 
+import com.example.sdhzbozi.common.dto.NewsDTO;
 import com.example.sdhzbozi.common.model.Event;
 import com.example.sdhzbozi.common.model.News;
 import com.example.sdhzbozi.common.repositories.EventRepository;
 import com.example.sdhzbozi.common.repositories.NewsRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -20,9 +22,9 @@ public class HomeService {
         this.eventRepository = eventRepository;
     }
 
-    public List<News> getNews() {
-        return newsRepository.findAll().stream()
-                .sorted(Comparator.comparing(News::getCreatedAt).reversed())
+    public List<NewsDTO> getNews() {
+        return toNewsDTO(newsRepository.findAll()).stream()
+                .sorted()
                 .toList();
     }
 
@@ -32,5 +34,19 @@ public class HomeService {
                 .toList();
     }
 
-    private List<>
+    private List<NewsDTO> toNewsDTO(List<News> newsList) {
+        List<NewsDTO> newsDTOs = new ArrayList<>();
+        for (News news : newsList) {
+            newsDTOs.add(new NewsDTO(
+                    news.getTitle(),
+                    news.getContent(),
+                    news.getCreatedAt(),
+                    news.getCreatedBy().getId()
+            ));
+        }
+        return newsDTOs;
+    }
+
+    private List
+
 }
