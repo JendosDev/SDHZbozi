@@ -10,7 +10,7 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Integer id;
 
     @Column(name = "title")
     private String title;
@@ -26,12 +26,12 @@ public class Event {
     private Department departmentId;
 
     @Column(name = "created_by")
-    private Long createdById;
+    private Integer createdById;
 
     public Event() {
     }
 
-    public Event(String title, String description, LocalDateTime date, Department departmentId, Long createdById) {
+    public Event(String title, String description, LocalDateTime date, Department departmentId, Integer createdById) {
         this.title = title;
         this.description = description;
         this.date = date;
@@ -39,12 +39,12 @@ public class Event {
         this.createdById = createdById;
     }
 
-    public Long getId() {
-        return Id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setId(Long id) {
-        Id = id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -79,11 +79,11 @@ public class Event {
         this.departmentId = departmentId;
     }
 
-    public Long getCreatedById() {
+    public Integer getCreatedById() {
         return createdById;
     }
 
-    public void setCreatedById(Long createdById) {
+    public void setCreatedById(Integer createdById) {
         this.createdById = createdById;
     }
 }

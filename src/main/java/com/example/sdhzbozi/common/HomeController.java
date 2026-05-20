@@ -19,10 +19,9 @@ public class HomeController {
     @GetMapping("/api/home")
     public Map<String, Object> getHomePage() {
         return Map.of(
-                "title", "SDH Úbislavice",
-                "subtitle", "Spolek hasičů a dětský kroužek",
-                    "news", homeService.getNews()
-                );
+                "news", homeService.getNews(),
+                "events", homeService.getEvents()
+        );
     }
 
 }
