@@ -25,13 +25,14 @@ public class Event {
     @JoinColumn(name = "department_id")
     private Department departmentId;
 
-    @Column(name = "created_by")
-    private Integer createdById;
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User createdById;
 
     public Event() {
     }
 
-    public Event(String title, String description, LocalDateTime date, Department departmentId, Integer createdById) {
+    public Event(String title, String description, LocalDateTime date, Department departmentId, User createdById) {
         this.title = title;
         this.description = description;
         this.date = date;
@@ -79,11 +80,11 @@ public class Event {
         this.departmentId = departmentId;
     }
 
-    public Integer getCreatedById() {
+    public User getCreatedById() {
         return createdById;
     }
 
-    public void setCreatedById(Integer createdById) {
+    public void setCreatedById(User createdById) {
         this.createdById = createdById;
     }
 }

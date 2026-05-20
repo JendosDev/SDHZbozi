@@ -1,5 +1,6 @@
 package com.example.sdhzbozi.common.service;
 
+import com.example.sdhzbozi.common.dto.EventDTO;
 import com.example.sdhzbozi.common.dto.NewsDTO;
 import com.example.sdhzbozi.common.model.Event;
 import com.example.sdhzbozi.common.model.News;
@@ -28,10 +29,11 @@ public class HomeService {
                 .toList();
     }
 
-    public List<Event> getEvents() {
-        return eventRepository.findAll().stream()
-                .sorted(Comparator.comparing(Event::getDate).reversed())
-                .toList();
+    public List<EventDTO> getEvents() {
+        return toEventDTO(eventRepository.findAll().stream()
+                .sorted()
+                .toList()
+        );
     }
 
     private List<NewsDTO> toNewsDTO(List<News> newsList) {
@@ -47,6 +49,18 @@ public class HomeService {
         return newsDTOs;
     }
 
-    private List
+    private List<EventDTO> toEventDTO(List<Event> eventList) {
+        List<EventDTO> eventDTOs = new ArrayList<>();
+        for (Event event : eventList) {
+            eventDTOs.add(new EventDTO(
+                    event.getTitle(),
+                    event.getDescription(),
+                    event.getDate(),
+                    event.getDepartmentId().getId(),
+                    event.getCreatedById().getId()
+            ));
+        }
+        return eventDTOs;
+    }
 
 }
