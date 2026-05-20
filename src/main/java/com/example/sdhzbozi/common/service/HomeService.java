@@ -4,6 +4,7 @@ import com.example.sdhzbozi.common.model.News;
 import com.example.sdhzbozi.common.repositories.NewsRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -17,7 +18,7 @@ public class HomeService {
 
     public List<News> getNews() {
         return newsRepository.findAll().stream()
-                .sorted()
+                .sorted(Comparator.comparing(News::getCreatedAt).reversed())
                 .toList();
     }
 

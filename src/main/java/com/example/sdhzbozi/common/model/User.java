@@ -1,5 +1,6 @@
 package com.example.sdhzbozi.common.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,19 +18,16 @@ public class User {
     private String email;
 
     @Column(name = "password")
+    @JsonIgnore
     private String password;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role roleId;
 
     public User() {
     }
 
-    public User(String name, String email, Role roleId) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
-        this.roleId = roleId;
+        this.password = password;
     }
 
     public Long getId() {
@@ -56,11 +54,11 @@ public class User {
         this.email = email;
     }
 
-    public Role getRoleId() {
-        return roleId;
+    public String getPassword() {
+        return password;
     }
 
-    public void setRoleId(Role roleId) {
-        this.roleId = roleId;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
