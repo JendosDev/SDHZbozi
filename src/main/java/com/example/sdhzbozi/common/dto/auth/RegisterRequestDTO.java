@@ -1,4 +1,4 @@
-package com.example.sdhzbozi.common.dto;
+package com.example.sdhzbozi.common.dto.auth;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

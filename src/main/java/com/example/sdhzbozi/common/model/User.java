@@ -19,7 +19,7 @@ public class User {
 
     @Column(name = "password")
     @JsonIgnore
-    private String password;
+    private String passwordHash;
 
     public User() {
     }
@@ -27,7 +27,7 @@ public class User {
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.passwordHash = password;
     }
 
     public Integer getId() {
@@ -55,10 +55,10 @@ public class User {
     }
 
     public String getPassword() {
-        return password;
+        return passwordHash;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 }
