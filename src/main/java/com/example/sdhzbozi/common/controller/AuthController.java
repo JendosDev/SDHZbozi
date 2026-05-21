@@ -4,6 +4,8 @@ import com.example.sdhzbozi.common.dto.auth.AuthAnswerDTO;
 import com.example.sdhzbozi.common.dto.auth.LoginRequestDTO;
 import com.example.sdhzbozi.common.dto.auth.RegisterRequestDTO;
 import com.example.sdhzbozi.common.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -57,6 +59,8 @@ public class AuthController {
     @PostMapping("/api/login")
     public ResponseEntity<AuthAnswerDTO> login (
             @Valid @RequestBody LoginRequestDTO form,
+            HttpServletRequest request,
+            HttpServletResponse response,
             Authentication authentication
     ) {
         if (isLoggedIn(authentication)) {
@@ -66,7 +70,7 @@ public class AuthController {
             );
         }
 
-        return authService.login(form);
+        return authService.login(form, request, response);
     }
 
     private boolean isLoggedIn (Authentication authentication) {

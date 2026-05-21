@@ -81,14 +81,6 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return passwordHash;
-    }
-
-    public void setPassword(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
     public Role getRole() {
         return role;
     }
