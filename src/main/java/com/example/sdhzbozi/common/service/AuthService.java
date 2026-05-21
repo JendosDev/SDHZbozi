@@ -5,9 +5,11 @@ import com.example.sdhzbozi.common.dto.auth.LoginRequestDTO;
 import com.example.sdhzbozi.common.dto.auth.RegisterRequestDTO;
 import com.example.sdhzbozi.common.model.User;
 import com.example.sdhzbozi.common.repositories.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService {
@@ -27,11 +29,11 @@ public class AuthService {
             throw new IllegalArgumentException("Registration form is empty");
         }
 
-        if (userRepository.existsUsersByEmail(form.email())) {
+        if (userRepository.existsByEmail(form.email())) {
             throw new IllegalArgumentException("This email has already been registered: " + form.email());
         }
 
-        if (userRepository.existsUserByName(form.username())){
+        if (userRepository.existsByName(form.username())){
             throw new IllegalArgumentException("This username has already been registered: " + form.username());
         }
 
@@ -48,14 +50,20 @@ public class AuthService {
     public ResponseEntity<AuthAnswerDTO> login (
             LoginRequestDTO form
     ) {
-        if (form == null) {
-            throw new IllegalArgumentException("Login form is empty");
-        }
+       User user = userRepository.findByName(form.username())
+               .orElseThrow(() -> new ResponseStatusException(
+                       HttpStatus.UNAUTHORIZED,
+                       "Invalid username or password"
+               ));
 
-        String username = form.username();
-        String
+       if (!passwordEncoder.matches(form.password(), user.getPassword())) {
+           throw new ResponseStatusException(
+                   HttpStatus.UNAUTHORIZED,
+                   "Invalid username or password"
+           );
+       }
 
-        return ResponseEntity.ok();
+        return ResponseEntity.ok(toAuthDTO(user));
     }
 
     private AuthAnswerDTO toAuthDTO (User user) {

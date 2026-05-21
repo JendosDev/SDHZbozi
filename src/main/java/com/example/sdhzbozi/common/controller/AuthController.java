@@ -54,7 +54,7 @@ public class AuthController {
             throw new IllegalStateException("User is already authorized" + authentication.getName());
         }
 
-        return authService.
+        return authService.login(form);
     }
 
 }

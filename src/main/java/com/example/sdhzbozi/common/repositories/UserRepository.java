@@ -3,10 +3,12 @@ package com.example.sdhzbozi.common.repositories;
 import com.example.sdhzbozi.common.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    boolean existsUsersByEmail(String email);
+import java.util.Optional;
 
-    boolean existsUserByName(String name);
+public interface UserRepository extends JpaRepository<User, Integer> {
+    boolean existsByEmail(String email);
 
-    User findUserByName(String name);
+    boolean existsByName(String name);
+
+    Optional<User> findByName(String name);
 }
