@@ -9,16 +9,15 @@ import com.example.sdhzbozi.common.repositories.NewsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class HomeService {
+public class APIService {
 
     private final NewsRepository newsRepository;
     private final EventRepository eventRepository;
 
-    public HomeService(NewsRepository newsRepository, EventRepository eventRepository) {
+    public APIService(NewsRepository newsRepository, EventRepository eventRepository) {
         this.newsRepository = newsRepository;
         this.eventRepository = eventRepository;
     }
@@ -34,6 +33,14 @@ public class HomeService {
                 .sorted()
                 .toList()
         );
+    }
+
+    public Long getNewsSize() {
+        return newsRepository.count();
+    }
+
+    public Long getEventsSize() {
+        return eventRepository.count();
     }
 
     private List<NewsDTO> toNewsDTO(List<News> newsList) {

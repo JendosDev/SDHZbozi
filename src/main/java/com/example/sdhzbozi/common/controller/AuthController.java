@@ -6,7 +6,6 @@ import com.example.sdhzbozi.common.dto.auth.RegisterRequestDTO;
 import com.example.sdhzbozi.common.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,5 +77,4 @@ public class AuthController {
                 && authentication.isAuthenticated()
                 && !(authentication instanceof AnonymousAuthenticationToken);
     }
-
 }
