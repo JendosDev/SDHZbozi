@@ -17,10 +17,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
         return http
+                .csrf(csrf -> csrf.spa())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/index.html", "/assets/**",
-                                "/api/home", "/api/about", "/api/history", "/css/**", "/js/**", "/images/**"
+                                "/api/home", "/api/about", "/api/history", "/api/csrf",
+                                "/css/**", "/js/**", "/images/**"
                         ).permitAll()
                         .requestMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/youth/**", "/api/youth/**").hasAnyRole("CHILD", "ADMIN", "MEMBER")
