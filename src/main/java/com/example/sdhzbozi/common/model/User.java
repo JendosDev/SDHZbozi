@@ -1,6 +1,7 @@
 package com.example.sdhzbozi.common.model;
 
 import com.example.sdhzbozi.common.enums.RoleEnum;
+import com.example.sdhzbozi.common.repositories.RoleRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -25,18 +26,19 @@ public class User {
     @JsonIgnore
     private String passwordHash;
 
-    @Column(name = "role")
-    private String role;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
-    public User() {
-    }
-
-    public User(String firstname, String surname, String email, String passwordHash) {
+    public User(String firstname, String surname, String email, String passwordHash, RoleRepository roleRepository) {
         this.firstname = firstname;
         this.surname = surname;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.role = RoleEnum.UNDIFINED.name();
+        this.role = roleRepository.findByName(RoleEnum.UNDEFINED);
+    }
+
+    public User() {
     }
 
     public String getFirstname() {
@@ -87,11 +89,11 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }

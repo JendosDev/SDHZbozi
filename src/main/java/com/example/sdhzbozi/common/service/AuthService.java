@@ -4,6 +4,7 @@ import com.example.sdhzbozi.common.dto.auth.AuthAnswerDTO;
 import com.example.sdhzbozi.common.dto.auth.LoginRequestDTO;
 import com.example.sdhzbozi.common.dto.auth.RegisterRequestDTO;
 import com.example.sdhzbozi.common.model.User;
+import com.example.sdhzbozi.common.repositories.RoleRepository;
 import com.example.sdhzbozi.common.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,12 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, RoleRepository roleRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     public ResponseEntity<AuthAnswerDTO> register (
@@ -37,7 +40,8 @@ public class AuthService {
                 form.firstname(),
                 form.surname(),
                 form.email(),
-                passwordEncoder.encode(form.password())
+                passwordEncoder.encode(form.password()),
+                roleRepository
         );
         userRepository.save(user);
 
