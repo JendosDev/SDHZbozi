@@ -50,7 +50,7 @@ public class AuthController {
 
         try {
             return authService.register(form);
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException e) {
             result.rejectValue("email", "email.exists", e.getMessage());
             throw new IllegalArgumentException("This email already exists");
         }

@@ -30,12 +30,12 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    public User(String firstname, String surname, String email, String passwordHash, RoleRepository roleRepository) {
+    public User(String firstname, String surname, String email, String passwordHash, Role role) {
         this.firstname = firstname;
         this.surname = surname;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.role = roleRepository.findByName(RoleEnum.UNDEFINED);
+        this.role = role;
     }
 
     public User() {

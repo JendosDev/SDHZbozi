@@ -3,6 +3,8 @@ package com.example.sdhzbozi.common.service;
 import com.example.sdhzbozi.common.dto.auth.AuthAnswerDTO;
 import com.example.sdhzbozi.common.dto.auth.LoginRequestDTO;
 import com.example.sdhzbozi.common.dto.auth.RegisterRequestDTO;
+import com.example.sdhzbozi.common.enums.RoleEnum;
+import com.example.sdhzbozi.common.model.Role;
 import com.example.sdhzbozi.common.model.User;
 import com.example.sdhzbozi.common.repositories.RoleRepository;
 import com.example.sdhzbozi.common.repositories.UserRepository;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,12 +51,15 @@ public class AuthService {
             throw new IllegalArgumentException("This email has already been registered: " + form.email());
         }
 
+        Role defaultRole = roleRepository.findByName(RoleEnum.UNDEFINED)
+                .orElseThrow(() -> new IllegalStateException("Default role not found"));
+
         User user = new User(
                 form.firstname(),
                 form.surname(),
                 form.email(),
                 passwordEncoder.encode(form.password()),
-                roleRepository
+                defaultRole
         );
         userRepository.save(user);
 
@@ -71,24 +77,24 @@ public class AuthService {
                        "Invalid email or password"
                ));
 
-       if (!passwordEncoder.matches(form.password(), user.getPasswordHash())) {
+       try {
+           Authentication authentication = authenticationManager.authenticate(
+                   new UsernamePasswordAuthenticationToken(
+                           form.email(),
+                           form.password()
+                   )
+           );
+
+           SecurityContext context = SecurityContextHolder.createEmptyContext();
+           context.setAuthentication(authentication);
+           SecurityContextHolder.setContext(context);
+           securityContextRepository.saveContext(context, request, response);
+       } catch (AuthenticationException e) {
            throw new ResponseStatusException(
                    HttpStatus.UNAUTHORIZED,
                    "Invalid email or password"
            );
        }
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        form.email(),
-                        form.password()
-                )
-        );
-
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-        securityContextRepository.saveContext(context, request, response);
 
         return ResponseEntity.ok(toAuthDTO(user));
     }
