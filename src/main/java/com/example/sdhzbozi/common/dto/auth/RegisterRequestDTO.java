@@ -5,8 +5,10 @@ import jakarta.validation.constraints.Pattern;
 
 public record RegisterRequestDTO(
         @NotNull
-        @Pattern(regexp = "^[a-zA-Z0-9_-]{3,16}$")
-        String username,
+        String firstname,
+
+        @NotNull
+        String surname,
 
         @NotNull
         @Pattern(regexp = "^\\S+@\\S+\\.\\S+$")

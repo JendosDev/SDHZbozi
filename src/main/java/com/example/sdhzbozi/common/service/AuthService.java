@@ -33,12 +33,9 @@ public class AuthService {
             throw new IllegalArgumentException("This email has already been registered: " + form.email());
         }
 
-        if (userRepository.existsByName(form.username())){
-            throw new IllegalArgumentException("This username has already been registered: " + form.username());
-        }
-
         User user = new User(
-                form.username(),
+                form.firstname(),
+                form.surname(),
                 form.email(),
                 passwordEncoder.encode(form.password())
         );
@@ -50,16 +47,16 @@ public class AuthService {
     public ResponseEntity<AuthAnswerDTO> login (
             LoginRequestDTO form
     ) {
-       User user = userRepository.findByName(form.username())
+       User user = userRepository.findByEmail(form.email())
                .orElseThrow(() -> new ResponseStatusException(
                        HttpStatus.UNAUTHORIZED,
-                       "Invalid username or password"
+                       "Invalid email or password"
                ));
 
        if (!passwordEncoder.matches(form.password(), user.getPassword())) {
            throw new ResponseStatusException(
                    HttpStatus.UNAUTHORIZED,
-                   "Invalid username or password"
+                   "Invalid email or password"
            );
        }
 
@@ -69,7 +66,7 @@ public class AuthService {
     private AuthAnswerDTO toAuthDTO (User user) {
         return new AuthAnswerDTO(
                 user.getId(),
-                user.getName(),
+                user.getFirstname(),
                 user.getEmail()
         );
     }

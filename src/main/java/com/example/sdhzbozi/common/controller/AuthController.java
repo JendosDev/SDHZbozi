@@ -6,12 +6,15 @@ import com.example.sdhzbozi.common.dto.auth.RegisterRequestDTO;
 import com.example.sdhzbozi.common.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @RestController
@@ -30,11 +33,17 @@ public class AuthController {
             Authentication authentication
     ) {
         if (result.hasErrors()) {
-            throw new IllegalArgumentException("Registration form has binding errors");
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Registration form has binding errors"
+            );
         }
 
-        if (authentication.isAuthenticated()){
-            throw new IllegalStateException("User is already authorized" + authentication.getName());
+        if (isLoggedIn(authentication)){
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "User is already authorized" + authentication.getName()
+            );
         }
 
         try {
@@ -50,11 +59,20 @@ public class AuthController {
             @Valid @RequestBody LoginRequestDTO form,
             Authentication authentication
     ) {
-        if (authentication.isAuthenticated()) {
-            throw new IllegalStateException("User is already authorized" + authentication.getName());
+        if (isLoggedIn(authentication)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "User is already authorized" + authentication.getName()
+            );
         }
 
         return authService.login(form);
+    }
+
+    private boolean isLoggedIn (Authentication authentication) {
+        return authentication != null
+                && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken);
     }
 
 }

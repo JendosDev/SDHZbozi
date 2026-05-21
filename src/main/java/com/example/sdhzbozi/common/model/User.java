@@ -1,5 +1,6 @@
 package com.example.sdhzbozi.common.model;
 
+import com.example.sdhzbozi.common.enums.RoleEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -11,8 +12,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Column(name = "surname")
+    private String surname;
 
     @Column(name = "email")
     private String email;
@@ -21,13 +25,42 @@ public class User {
     @JsonIgnore
     private String passwordHash;
 
+    @Column(name = "role")
+    private String role;
+
     public User() {
     }
 
-    public User(String name, String email, String password) {
-        this.name = name;
+    public User(String firstname, String surname, String email, String passwordHash) {
+        this.firstname = firstname;
+        this.surname = surname;
         this.email = email;
-        this.passwordHash = password;
+        this.passwordHash = passwordHash;
+        this.role = RoleEnum.UNDIFINED.name();
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public Integer getId() {
@@ -36,14 +69,6 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmail() {
@@ -60,5 +85,13 @@ public class User {
 
     public void setPassword(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
