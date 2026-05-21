@@ -1,6 +1,7 @@
 package com.example.sdhzbozi.common.service;
 
 import com.example.sdhzbozi.common.dto.auth.AuthAnswerDTO;
+import com.example.sdhzbozi.common.dto.auth.LoginRequestDTO;
 import com.example.sdhzbozi.common.dto.auth.RegisterRequestDTO;
 import com.example.sdhzbozi.common.model.User;
 import com.example.sdhzbozi.common.repositories.UserRepository;
@@ -42,6 +43,19 @@ public class AuthService {
         userRepository.save(user);
 
         return ResponseEntity.ok(toAuthDTO(user));
+    }
+
+    public ResponseEntity<AuthAnswerDTO> login (
+            LoginRequestDTO form
+    ) {
+        if (form == null) {
+            throw new IllegalArgumentException("Login form is empty");
+        }
+
+        String username = form.username();
+        String
+
+        return ResponseEntity.ok();
     }
 
     private AuthAnswerDTO toAuthDTO (User user) {
