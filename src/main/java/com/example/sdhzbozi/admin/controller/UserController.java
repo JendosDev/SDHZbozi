@@ -41,7 +41,7 @@ public class UserController {
     @PatchMapping("/{id}/edit")
     public ResponseEntity<AuthAnswerDTO> patchUser (
             @RequestBody UserPatchDTO dto,
-            @RequestParam Integer id,
+            @PathVariable Integer id,
             Authentication authentication
     ) {
         isAuthorized(authentication);

@@ -27,12 +27,16 @@ public class AdminUserService {
     public AuthAnswerDTO patchUser (UserPatchDTO dto, Integer id) {
         User user = dtoToUser(id);
 
-        RoleEnum roleName = stringToRole(dto.role().name());
-        Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "This role does not exists: " + roleName
-                ));
+        if (dto.role() != null) {
+            RoleEnum roleName = stringToRole(dto.role().name());
+            Role role = roleRepository.findByName(roleName)
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "This role does not exists: " + roleName
+                    ));
+
+            user.setRole(role);
+        }
 
         if (dto.firstname() != null) {
             user.setFirstname(dto.firstname());
@@ -45,8 +49,6 @@ public class AdminUserService {
         if (dto.email() != null) {
             user.setEmail(dto.email());
         }
-
-        user.setRole(role);
 
         userRepository.save(user);
         return userToDTO(user);
