@@ -1,5 +1,9 @@
 package com.example.sdhzbozi;
 
+import com.example.sdhzbozi.common.enums.RoleEnum;
+import com.example.sdhzbozi.common.model.Role;
+import com.example.sdhzbozi.common.repositories.RoleRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,13 +24,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.datasource.username=sa",
         "spring.datasource.password=",
         "spring.jpa.hibernate.ddl-auto=create-drop",
-        "spring.jpa.show-sql=false"
+        "spring.jpa.show-sql=false",
+        "cloudinary.url=not-a-cloudinary-url"
 })
 @AutoConfigureMockMvc
 class SdhZboziApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @BeforeEach
+    void seedDefaultRole() {
+        roleRepository.findByName(RoleEnum.UNDEFINED)
+                .orElseGet(() -> roleRepository.save(new Role(RoleEnum.UNDEFINED)));
+    }
 
     @Test
     void contextLoads() {
@@ -48,7 +62,7 @@ class SdhZboziApplicationTests {
                                 }
                                 """.formatted(email)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Jan"))
+                .andExpect(jsonPath("$.firstname").value("Jan"))
                 .andExpect(jsonPath("$.email").value(email));
 
         mockMvc.perform(post("/api/login")
@@ -61,7 +75,7 @@ class SdhZboziApplicationTests {
                                 }
                                 """.formatted(email)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Jan"))
+                .andExpect(jsonPath("$.firstname").value("Jan"))
                 .andExpect(jsonPath("$.email").value(email));
     }
 

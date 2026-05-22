@@ -1,6 +1,7 @@
 package com.example.sdhzbozi.common.cloudinary;
 
 import com.cloudinary.Cloudinary;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Service
+@ConditionalOnBean(Cloudinary.class)
 public class CloudinaryImageService {
 
     private final Cloudinary cloudinary;
