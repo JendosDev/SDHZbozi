@@ -54,6 +54,4 @@ public class UserController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This user does not have rights to enter admin page: " + authentication.getName()));
     }
 
-
-
 }

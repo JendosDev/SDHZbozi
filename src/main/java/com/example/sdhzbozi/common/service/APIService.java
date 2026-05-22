@@ -9,6 +9,7 @@ import com.example.sdhzbozi.common.repositories.NewsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -24,13 +25,19 @@ public class APIService {
 
     public List<NewsDTO> getNews() {
         return toNewsDTO(newsRepository.findAll()).stream()
-                .sorted()
+                .sorted(Comparator.comparing(
+                        NewsDTO::createdAt,
+                        Comparator.nullsLast(Comparator.reverseOrder())
+                ))
                 .toList();
     }
 
     public List<EventDTO> getEvents() {
         return toEventDTO(eventRepository.findAll().stream()
-                .sorted()
+                .sorted(Comparator.comparing(
+                        Event::getDate,
+                        Comparator.nullsLast(Comparator.naturalOrder())
+                ))
                 .toList()
         );
     }
