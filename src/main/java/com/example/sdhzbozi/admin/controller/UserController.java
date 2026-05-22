@@ -3,8 +3,10 @@ package com.example.sdhzbozi.admin.controller;
 import com.example.sdhzbozi.admin.service.AdminService;
 import com.example.sdhzbozi.admin.service.AdminUserService;
 import com.example.sdhzbozi.common.dto.auth.AuthAnswerDTO;
+import com.example.sdhzbozi.common.dto.auth.UserPatchDTO;
 import com.example.sdhzbozi.common.model.User;
 import com.example.sdhzbozi.common.repositories.UserRepository;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -36,20 +38,22 @@ public class UserController {
         return adminService.approvalPage();
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<AuthAnswerDTO> patchUser(
-            @RequestParam String role,
+    @PatchMapping("/{id}/edit")
+    public ResponseEntity<AuthAnswerDTO> patchUser (
+            @RequestBody UserPatchDTO dto,
             @RequestParam Integer id,
             Authentication authentication
     ) {
         isAuthorized(authentication);
 
-        return ResponseEntity.ok(adminUserService.editUserRole(role, id));
+        return ResponseEntity.ok(adminUserService.patchUser(dto, id));
     }
 
     private User isAuthorized (Authentication authentication) {
         return userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This user does not have rights to enter admin page: " + authentication.getName()));
     }
+
+
 
 }

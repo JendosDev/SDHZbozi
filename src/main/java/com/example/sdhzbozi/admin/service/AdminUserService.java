@@ -1,6 +1,7 @@
 package com.example.sdhzbozi.admin.service;
 
 import com.example.sdhzbozi.common.dto.auth.AuthAnswerDTO;
+import com.example.sdhzbozi.common.dto.auth.UserPatchDTO;
 import com.example.sdhzbozi.common.enums.RoleEnum;
 import com.example.sdhzbozi.common.model.Role;
 import com.example.sdhzbozi.common.model.User;
@@ -23,22 +24,31 @@ public class AdminUserService {
         this.userRepository = userRepository;
     }
 
-    public AuthAnswerDTO editUserRole (
-            String queryRole,
-            Integer id
-    ) {
-        RoleEnum roleName = stringToRole(queryRole);
+    public AuthAnswerDTO patchUser (UserPatchDTO dto, Integer id) {
+        User user = dtoToUser(id);
+
+        RoleEnum roleName = stringToRole(dto.role().name());
         Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "This role does not exists: " + roleName
                 ));
 
-        User user = dtoToUser(id);
+        if (dto.firstname() != null) {
+            user.setFirstname(dto.firstname());
+        }
+
+        if (dto.surname() != null) {
+            user.setSurname(dto.surname());
+        }
+
+        if (dto.email() != null) {
+            user.setEmail(dto.email());
+        }
 
         user.setRole(role);
-        userRepository.save(user);
 
+        userRepository.save(user);
         return userToDTO(user);
     }
 
