@@ -6,6 +6,7 @@ public record NewsDTO (
         String title,
         String content,
         LocalDateTime createdAt,
-        Integer createdById
+        Integer createdById,
+        String imageUrl
 ) {
 }

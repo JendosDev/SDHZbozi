@@ -7,6 +7,7 @@ public record EventDTO(
         String description,
         LocalDateTime date,
         Integer departmentId,
-        Integer createdById
+        Integer createdById,
+        String imageUrl
 ) {
 }

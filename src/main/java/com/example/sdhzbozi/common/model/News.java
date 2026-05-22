@@ -25,6 +25,12 @@ public class News {
     @JoinColumn(name = "created_by")
     private User createdBy;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "image_public_id")
+    private String imagePublicId;
+
     public News(String title, String content, LocalDateTime createdAt, User createdBy) {
         this.title = title;
         this.content = content;
@@ -73,5 +79,21 @@ public class News {
 
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImagePublicId() {
+        return imagePublicId;
+    }
+
+    public void setImagePublicId(String imagePublicId) {
+        this.imagePublicId = imagePublicId;
     }
 }

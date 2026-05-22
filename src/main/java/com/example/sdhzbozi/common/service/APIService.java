@@ -50,7 +50,8 @@ public class APIService {
                     news.getTitle(),
                     news.getContent(),
                     news.getCreatedAt(),
-                    news.getCreatedBy().getId()
+                    news.getCreatedBy().getId(),
+                    news.getImageUrl()
             ));
         }
         return newsDTOs;
@@ -64,7 +65,8 @@ public class APIService {
                     event.getDescription(),
                     event.getDate(),
                     event.getDepartmentId().getId(),
-                    event.getCreatedById().getId()
+                    event.getCreatedById().getId(),
+                    event.getImageUrl()
             ));
         }
         return eventDTOs;

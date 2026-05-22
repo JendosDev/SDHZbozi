@@ -29,6 +29,12 @@ public class Event {
     @JoinColumn(name = "created_by")
     private User createdById;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "image_public_id")
+    private String imagePublicId;
+
     public Event() {
     }
 
@@ -86,5 +92,21 @@ public class Event {
 
     public void setCreatedById(User createdById) {
         this.createdById = createdById;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImagePublicId() {
+        return imagePublicId;
+    }
+
+    public void setImagePublicId(String imagePublicId) {
+        this.imagePublicId = imagePublicId;
     }
 }
