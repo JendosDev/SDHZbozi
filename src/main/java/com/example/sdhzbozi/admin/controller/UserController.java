@@ -6,7 +6,6 @@ import com.example.sdhzbozi.common.dto.auth.AuthAnswerDTO;
 import com.example.sdhzbozi.common.dto.auth.UserPatchDTO;
 import com.example.sdhzbozi.common.model.User;
 import com.example.sdhzbozi.common.repositories.UserRepository;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
