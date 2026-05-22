@@ -13,6 +13,7 @@ import com.example.sdhzbozi.common.model.User;
 import com.example.sdhzbozi.common.repositories.DepartmentRepository;
 import com.example.sdhzbozi.common.repositories.EventRepository;
 import com.example.sdhzbozi.common.repositories.NewsRepository;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,12 +24,12 @@ import java.time.LocalDateTime;
 @Service
 public class PostService {
 
-    private final CloudinaryImageService cloudinaryImageService;
+    private final ObjectProvider<CloudinaryImageService> cloudinaryImageService;
     private final NewsRepository newsRepository;
     private final DepartmentRepository departmentRepository;
     private final EventRepository eventRepository;
 
-    public PostService(CloudinaryImageService cloudinaryImageService, NewsRepository newsRepository, DepartmentRepository departmentRepository, EventRepository eventRepository) {
+    public PostService(ObjectProvider<CloudinaryImageService> cloudinaryImageService, NewsRepository newsRepository, DepartmentRepository departmentRepository, EventRepository eventRepository) {
         this.cloudinaryImageService = cloudinaryImageService;
         this.newsRepository = newsRepository;
         this.departmentRepository = departmentRepository;
@@ -54,9 +55,18 @@ public class PostService {
         );
 
         if (form.image() != null && !(form.image().isEmpty())) {
-            UploadedImage image = cloudinaryImageService.upload(form.image(), "sdh-zbozi/news");
-            news.setImageUrl(image.url());
-            news.setImagePublicId(image.publicId());
+            CloudinaryImageService imageService = cloudinaryImageService.getIfAvailable();
+            if (imageService == null) {
+                throw new ResponseStatusException(
+                        HttpStatus.SERVICE_UNAVAILABLE,
+                        "Cloudinary is not configured"
+                );
+            }
+            else {
+                UploadedImage image = imageService.upload(form.image(), "sdh-zbozi/news");
+                news.setImageUrl(image.url());
+                news.setImagePublicId(image.publicId());
+            }
         }
 
         newsRepository.save(news);
@@ -90,9 +100,18 @@ public class PostService {
         );
 
         if (form.image() != null && !(form.image().isEmpty())) {
-            UploadedImage image = cloudinaryImageService.upload(form.image(), "sdh-zbozi/events");
-            event.setImageUrl(image.url());
-            event.setImagePublicId(image.publicId());
+            CloudinaryImageService imageService = cloudinaryImageService.getIfAvailable();
+            if (imageService == null) {
+                throw new ResponseStatusException(
+                        HttpStatus.SERVICE_UNAVAILABLE,
+                        "Cloudinary is not configured"
+                );
+            }
+            else {
+                UploadedImage image = imageService.upload(form.image(), "sdh-zbozi/events");
+                event.setImageUrl(image.url());
+                event.setImagePublicId(image.publicId());
+            }
         }
 
         eventRepository.save(event);

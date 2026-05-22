@@ -24,8 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.datasource.username=sa",
         "spring.datasource.password=",
         "spring.jpa.hibernate.ddl-auto=create-drop",
-        "spring.jpa.show-sql=false",
-        "cloudinary.url=not-a-cloudinary-url"
+        "spring.jpa.show-sql=false"
 })
 @AutoConfigureMockMvc
 class SdhZboziApplicationTests {
