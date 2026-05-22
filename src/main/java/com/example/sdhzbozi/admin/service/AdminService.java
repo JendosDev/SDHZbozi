@@ -1,4 +1,4 @@
-package com.example.sdhzbozi.admin;
+package com.example.sdhzbozi.admin.service;
 
 import com.example.sdhzbozi.common.dto.auth.AuthAnswerDTO;
 import com.example.sdhzbozi.common.enums.RoleEnum;
@@ -41,6 +41,8 @@ public class AdminService {
 
     public Map<String, Object> approvalPage() {
         return Map.of(
+                "users", getUsers(),
+                "usersCount", getUsersCount(),
                 "undefined_users", getUndefinedUsers(),
                 "undefined_users_count", getUndefinedUsersCount()
         );
@@ -69,7 +71,8 @@ public class AdminService {
                 user.getId(),
                 user.getFirstname(),
                 user.getSurname(),
-                user.getEmail()
+                user.getEmail(),
+                user.getRole().getName()
         );
     }
 

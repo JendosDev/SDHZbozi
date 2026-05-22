@@ -13,7 +13,7 @@ public class CloudinaryImageService {
     private final Cloudinary cloudinary;
 
     public CloudinaryImageService(Cloudinary cloudinary) {
-        this.cloudinary = new Cloudinary(System.getenv("CLOUDINARY_URL"));
+        this.cloudinary = cloudinary;
     }
 
     public UploadedImage upload(MultipartFile file, String folder) throws IOException {

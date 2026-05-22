@@ -107,7 +107,8 @@ public class AuthService {
                 user.getId(),
                 user.getFirstname(),
                 user.getSurname(),
-                user.getEmail()
+                user.getEmail(),
+                user.getRole().getName()
         );
     }
 
