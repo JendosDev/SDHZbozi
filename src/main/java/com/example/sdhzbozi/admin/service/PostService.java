@@ -53,7 +53,7 @@ public class PostService {
                 user
         );
 
-        if (form.image() != null) {
+        if (form.image() != null && !(form.image().isEmpty())) {
             UploadedImage image = cloudinaryImageService.upload(form.image(), "sdh-zbozi/news");
             news.setImageUrl(image.url());
             news.setImagePublicId(image.publicId());
@@ -89,7 +89,7 @@ public class PostService {
                 user
         );
 
-        if (form.image() != null) {
+        if (form.image() != null && !(form.image().isEmpty())) {
             UploadedImage image = cloudinaryImageService.upload(form.image(), "sdh-zbozi/events");
             event.setImageUrl(image.url());
             event.setImagePublicId(image.publicId());

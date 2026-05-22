@@ -19,7 +19,7 @@ public class EventsController {
     public Map<String, Object> getEventPage() {
         return Map.of(
                 "events", apiService.getEvents(),
-                "count", apiService.getEvents()
+                "count", apiService.getEventsSize()
         );
     }
 

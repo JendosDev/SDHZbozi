@@ -41,10 +41,10 @@ public class PostController {
     public ResponseEntity<EventDTO> postEvent (
             @ModelAttribute EventRequestForm form,
             Authentication authentication
-    ) {
+    ) throws IOException {
         User user = isAuthorized(authentication);
 
-        return ResponseEntity.ok(postService);
+        return ResponseEntity.ok(postService.postEvent(form, user));
     }
 
     private User isAuthorized (Authentication authentication) {
