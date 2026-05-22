@@ -1,4 +1,4 @@
-package com.example.sdhzbozi.common.dto;
+package com.example.sdhzbozi.common.dto.request;
 
 import org.springframework.web.multipart.MultipartFile;
 

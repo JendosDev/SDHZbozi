@@ -1,8 +1,10 @@
 package com.example.sdhzbozi.admin.controller;
 
 import com.example.sdhzbozi.admin.service.PostService;
+import com.example.sdhzbozi.common.dto.EventDTO;
 import com.example.sdhzbozi.common.dto.NewsDTO;
-import com.example.sdhzbozi.common.dto.NewsRequestForm;
+import com.example.sdhzbozi.common.dto.request.EventRequestForm;
+import com.example.sdhzbozi.common.dto.request.NewsRequestForm;
 import com.example.sdhzbozi.common.model.User;
 import com.example.sdhzbozi.common.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,16 @@ public class PostController {
         User user = isAuthorized(authentication);
 
         return ResponseEntity.ok(postService.postNews(form, user));
+    }
+
+    @PostMapping("/events")
+    public ResponseEntity<EventDTO> postEvent (
+            @ModelAttribute EventRequestForm form,
+            Authentication authentication
+    ) {
+        User user = isAuthorized(authentication);
+
+        return ResponseEntity.ok(postService);
     }
 
     private User isAuthorized (Authentication authentication) {
