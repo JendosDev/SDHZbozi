@@ -48,7 +48,10 @@ public class AuthService {
         }
 
         if (userRepository.existsByEmail(form.email())) {
-            throw new IllegalArgumentException("This email has already been registered: " + form.email());
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "This email has already been registered: " + form.email()
+            );
         }
 
         Role defaultRole = roleRepository.findByName(RoleEnum.UNDEFINED)

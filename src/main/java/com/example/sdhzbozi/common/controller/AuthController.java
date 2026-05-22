@@ -47,12 +47,7 @@ public class AuthController {
             );
         }
 
-        try {
-            return authService.register(form);
-        } catch (IllegalArgumentException e) {
-            result.rejectValue("email", "email.exists", e.getMessage());
-            throw new IllegalArgumentException("This email already exists");
-        }
+        return authService.register(form);
     }
 
     @PostMapping("/api/login")

@@ -115,10 +115,7 @@ Možné chyby:
 | Status | Význam |
 | --- | --- |
 | `403` | chybí nebo je neplatný CSRF token |
-| `409` | nevalidní registrační formulář nebo uživatel už je přihlášený |
-| `500` | aktuálně může nastat při duplicitním emailu nebo chybějící výchozí roli v databázi |
-
-Poznámka pro backend: pro duplicitní email by bylo lepší vracet `409 Conflict`.
+| `409` | nevalidní registrační formulář, duplicitní email nebo uživatel už je přihlášený |
 
 ### Přihlášení
 
