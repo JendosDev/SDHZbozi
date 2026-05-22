@@ -41,7 +41,8 @@ public class AdminService {
 
     public Map<String, Object> approvalPage() {
         return Map.of(
-                "undefined_users", getUndefinedUsers()
+                "undefined_users", getUndefinedUsers(),
+                "undefined_users_count", getUndefinedUsersCount()
         );
     }
 
@@ -77,7 +78,7 @@ public class AdminService {
     }
 
     private Long getUndefinedUsersCount() {
-        return userRepository
+        return roleRepository.undefinedUsersCount();
     }
 
 }

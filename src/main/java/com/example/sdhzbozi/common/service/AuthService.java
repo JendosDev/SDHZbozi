@@ -106,6 +106,7 @@ public class AuthService {
         return new AuthAnswerDTO(
                 user.getId(),
                 user.getFirstname(),
+                user.getSurname(),
                 user.getEmail()
         );
     }

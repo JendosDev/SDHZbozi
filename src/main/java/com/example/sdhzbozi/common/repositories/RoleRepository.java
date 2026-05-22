@@ -11,7 +11,9 @@ public interface RoleRepository extends JpaRepository<Role, Integer> {
     Optional<Role> findByName(RoleEnum name);
 
     @Query("""
-        
-                """)
-    Long undefindUsersCount();
+            SELECT COUNT(u)
+            FROM User u
+            WHERE u.role.name = com.example.sdhzbozi.common.enums.RoleEnum.UNDEFINED
+            """)
+    Long undefinedUsersCount();
 }
