@@ -35,6 +35,9 @@ public class Event {
     @Column(name = "image_public_id")
     private String imagePublicId;
 
+    @Column(name = "location")
+    private String location;
+
     public Event() {
     }
 
@@ -108,5 +111,13 @@ public class Event {
 
     public void setImagePublicId(String imagePublicId) {
         this.imagePublicId = imagePublicId;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

@@ -73,7 +73,8 @@ public class APIService {
                     event.getDate(),
                     event.getDepartmentId().getId(),
                     event.getCreatedById().getId(),
-                    event.getImageUrl()
+                    event.getImageUrl(),
+                    event.getLocation()
             ));
         }
         return eventDTOs;

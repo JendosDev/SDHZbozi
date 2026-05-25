@@ -9,6 +9,7 @@ public record EventRequestForm (
     String description,
     LocalDateTime time,
     Integer departmentId,
-    MultipartFile image
+    MultipartFile image,
+    String location
 ) {
 }

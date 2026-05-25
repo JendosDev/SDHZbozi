@@ -136,7 +136,8 @@ public class PostService {
                 event.getDate(),
                 event.getDepartmentId().getId(),
                 event.getCreatedById().getId(),
-                event.getImageUrl()
+                event.getImageUrl(),
+                event.getLocation()
         );
     }
 
