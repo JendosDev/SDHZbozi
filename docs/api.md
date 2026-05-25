@@ -16,7 +16,7 @@ credentials: "include"
 
 Projekt má zapnutou CSRF ochranu pro API. To znamená, že pro `POST`, `PUT`, `PATCH` a `DELETE` požadavky musí frontend poslat CSRF token.
 
-Nejdřív si frontend vyžádá token:
+Nejdřív si frontend vyžádá token. Backend používá `csrf.spa()`, takže tento request nastaví cookie `XSRF-TOKEN`. Hodnota v JSON odpovědi může být maskovaná, proto ji nepoužívej jako hodnotu hlavičky pro SPA requesty; do hlavičky patří hodnota z cookie `XSRF-TOKEN`.
 
 ```http
 GET /api/csrf
@@ -35,7 +35,7 @@ Příklad odpovědi:
 React helper:
 
 ```js
-export async function getCsrfToken() {
+export async function refreshCsrfToken() {
   const response = await fetch("/api/csrf", {
     credentials: "include"
   });
@@ -43,26 +43,51 @@ export async function getCsrfToken() {
   if (!response.ok) {
     throw new Error("Nepodarilo se nacist CSRF token");
   }
+}
 
-  return response.json();
+function getCookie(name) {
+  return document.cookie
+    .split("; ")
+    .find((row) => row.startsWith(`${name}=`))
+    ?.split("=")[1];
+}
+
+export async function getCsrfHeaders() {
+  await refreshCsrfToken();
+
+  const token = getCookie("XSRF-TOKEN");
+  if (!token) {
+    throw new Error("CSRF cookie XSRF-TOKEN chybi");
+  }
+
+  return {
+    "X-XSRF-TOKEN": decodeURIComponent(token)
+  };
 }
 ```
 
 Použití u `POST` požadavku:
 
 ```js
-const csrf = await getCsrfToken();
+const csrfHeaders = await getCsrfHeaders();
 
 await fetch("/api/login", {
   method: "POST",
   credentials: "include",
   headers: {
     "Content-Type": "application/json",
-    [csrf.headerName]: csrf.token
+    ...csrfHeaders
   },
   body: JSON.stringify(data)
 });
 ```
+
+Postman:
+
+1. `GET http://localhost:8080/api/csrf`
+2. Zkontroluj, že Postman ulozil cookie `XSRF-TOKEN` pro stejnou domenu a port.
+3. `POST http://localhost:8080/api/register`
+4. Pridej header `X-XSRF-TOKEN` s hodnotou cookie `XSRF-TOKEN`. Request musi poslat i samotnou cookie.
 
 Bez CSRF hlavičky může Spring Security vrátit:
 
@@ -154,14 +179,14 @@ Příklad v Reactu:
 
 ```js
 export async function login(email, password) {
-  const csrf = await getCsrfToken();
+  const csrfHeaders = await getCsrfHeaders();
 
   const response = await fetch("/api/login", {
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      [csrf.headerName]: csrf.token
+      ...csrfHeaders
     },
     body: JSON.stringify({ email, password })
   });
@@ -195,14 +220,12 @@ Příklad:
 
 ```js
 export async function logout() {
-  const csrf = await getCsrfToken();
+  const csrfHeaders = await getCsrfHeaders();
 
   const response = await fetch("/api/logout", {
     method: "POST",
     credentials: "include",
-    headers: {
-      [csrf.headerName]: csrf.token
-    }
+    headers: csrfHeaders
   });
 
   if (!response.ok) {
@@ -347,8 +370,10 @@ async function request(path, options = {}) {
   }
 
   if (!["GET", "HEAD", "OPTIONS"].includes(method.toUpperCase())) {
-    const csrf = await getCsrfToken();
-    headers.set(csrf.headerName, csrf.token);
+    const csrfHeaders = await getCsrfHeaders();
+    for (const [name, value] of Object.entries(csrfHeaders)) {
+      headers.set(name, value);
+    }
   }
 
   const response = await fetch(`${API_BASE}${path}`, {
@@ -371,7 +396,7 @@ async function request(path, options = {}) {
 }
 
 export const api = {
-  csrf: () => getCsrfToken(),
+  csrf: () => refreshCsrfToken(),
   home: () => request("/api/home"),
   news: () => request("/api/news"),
   events: () => request("/api/events"),
