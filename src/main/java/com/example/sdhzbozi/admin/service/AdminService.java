@@ -1,9 +1,13 @@
 package com.example.sdhzbozi.admin.service;
 
+import com.example.sdhzbozi.common.dto.DepartmentDTO;
 import com.example.sdhzbozi.common.dto.auth.AuthAnswerDTO;
+import com.example.sdhzbozi.common.dto.request.DepartmentDTOForm;
 import com.example.sdhzbozi.common.enums.RoleEnum;
+import com.example.sdhzbozi.common.model.Department;
 import com.example.sdhzbozi.common.model.Role;
 import com.example.sdhzbozi.common.model.User;
+import com.example.sdhzbozi.common.repositories.DepartmentRepository;
 import com.example.sdhzbozi.common.repositories.RoleRepository;
 import com.example.sdhzbozi.common.repositories.UserRepository;
 import com.example.sdhzbozi.common.service.APIService;
@@ -20,11 +24,13 @@ public class AdminService {
     private final APIService apiService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final DepartmentRepository departmentRepository;
 
-    public AdminService(APIService apiService, UserRepository userRepository, RoleRepository roleRepository) {
+    public AdminService(APIService apiService, UserRepository userRepository, RoleRepository roleRepository, DepartmentRepository departmentRepository) {
         this.apiService = apiService;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     public Map<String, Object> adminPage(User user) {
@@ -46,6 +52,24 @@ public class AdminService {
                 "undefined_users", getUndefinedUsers(),
                 "undefined_users_count", getUndefinedUsersCount()
         );
+    }
+
+    public List<DepartmentDTO> getDepartments() {
+        return departmentRepository.findAll().stream()
+                .map(this::departmentToDTO)
+                .toList();
+    }
+
+    public DepartmentDTO postDepartment(DepartmentDTOForm form) {
+        if (form == null || form.name() == null || form.name().isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Name cannot be empty"
+            );
+        }
+
+        Department department = new Department(form.name());
+        return departmentToDTO(departmentRepository.save(department));
     }
 
     private List<AuthAnswerDTO> getUsers () {
@@ -82,6 +106,13 @@ public class AdminService {
 
     private Long getUndefinedUsersCount() {
         return roleRepository.undefinedUsersCount();
+    }
+
+    private DepartmentDTO departmentToDTO (Department department) {
+        return new DepartmentDTO(
+                department.getId(),
+                department.getName()
+        );
     }
 
 }
